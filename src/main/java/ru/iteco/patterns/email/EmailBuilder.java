@@ -1,47 +1,102 @@
 package main.java.ru.iteco.patterns.email;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Arrays;
 
-public class EmailBuilder {
-
-    private Set<String> to = new HashSet<String>();
-    private String subject;
-    private Content content;
+public class EmailBuilder implements Subject, To, CopyTo, Contentt, From {
+    private Email email = new Email();
 
 
-    public EmailBuilder addRecipient(String to) {
-        this.to.add(to);
+    private EmailBuilder() {
+    }
+
+    public static Subject createBuilder() {
+        return new EmailBuilder();
+    }
+
+    @Override
+    public From subject(String subject) {
+        email.setSubject(subject);
         return this;
     }
 
-    public EmailBuilder removeRecipient(String recipient) {
-        this.to.remove(recipient);
+    @Override
+    public To to(String to) {
+        email.setTo(to);
         return this;
     }
 
-    public EmailBuilder setTitle(String subject) {
-        this.subject = subject;
+    @Override
+    public To toAll(String... toAll) {
+        Arrays.stream(toAll).forEach(to -> email.setTo(to));
         return this;
     }
 
+    @Override
+    public CopyTo copyTo(String to) {
+        email.setCopyTo(to);
+        return this;
+    }
 
+    @Override
+    public CopyTo copyToAll(String... toAll) {
+        Arrays.stream(toAll).forEach(to -> email.setCopyTo(to));
+        return this;
+    }
+
+    @Override
+    public Contentt content(Content content) {
+        email.setContent(content);
+        return this;
+    }
+
+    public To from(String from) {
+        email.setFrom(from);
+        return this;
+    }
+
+    @Override
     public Email build() {
-
-        String message = greeting + "\n" + mainText + "\n" + closing;
-        String recipientSection = commaSeparatedRecipients();
-
-        return new Email(subject, recipientSection, message);
+        return email;
     }
 
-    private String commaSeparatedRecipients() {
+}
 
-        StringBuilder sb = new StringBuilder();
-        for (String recipient : recipients) {
-            sb.append(",").append(recipient);
-        }
+interface Subject  {
+    From subject(String subject);
+}
 
-        return sb.toString().replaceFirst(",", "");
-    }
+
+
+interface To  {
+    To to(String to);
+
+    To toAll(String... toAll);
+
+    CopyTo copyTo(String to);
+
+    CopyTo copyToAll(String... toAll);
+
+    Contentt content(Content content);
+
+}
+
+interface CopyTo  {
+    CopyTo copyTo(String to);
+
+    CopyTo copyToAll(String... toAll);
+
+    Contentt content(Content content);
+
+}
+
+interface From {
+    To from(String from);
+    To to(String to);
+
+    To toAll(String... toAll);
+}
+
+interface Contentt {
+    Email build();
 
 }

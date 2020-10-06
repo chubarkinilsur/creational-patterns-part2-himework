@@ -1,46 +1,48 @@
 package main.java.ru.iteco.patterns.email;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class Email {
 
-    private final String subject;
-    private final String to;
-    private final Content content;
-    private final String from;
-    private final String copyTo;
+    private String subject;
+    private Set <String> to = new HashSet <>();
+    private Content content;
+    private String from = "surik110@yandex.ru";
+    private Set <String> copyTo = new HashSet();
 
-    public Email(String subject, String to, Content content, String from, String copyTo) {
+    public Email() {
+
+    }
+
+    public void setSubject(String subject) {
         this.subject = subject;
-        this.to = to;
+    }
+
+    public void setTo(String to) {
+        this.to.add(to);
+    }
+
+    public void setContent(Content content) {
+        content.setFrom(from);
         this.content = content;
+    }
+
+    public void setFrom(String from) {
         this.from = from;
-        this.copyTo = copyTo;
     }
 
-
-    public String getSubject() {
-        return subject;
+    public void setCopyTo(String copyTo) {
+        this.copyTo.add(copyTo);
     }
 
-    public String getTo() {
-        return to;
+    @Override
+    public String toString() {
+        return "Email{" +
+                "subject='" + subject + '\'' +
+                ", to=" + to +
+                ", content=" + content +
+                ", copyTo=" + copyTo +
+                '}';
     }
-
-    public Content getContent() {
-        return content;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public String getCopyTo() {
-        return copyTo;
-    }
-
-    public void send() {
-
-    }
-
-
-
 }
